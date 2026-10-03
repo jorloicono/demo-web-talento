@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Demo web · Consultoría de talento</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Instrument+Sans:wght@400;500;600&display=swap">
+<style>
+:root{
+  --bg:#F3F6F4; --surface:#FFFFFF; --ink:#0F2A30; --muted:#566C70; --petrol:#0E2F36; --petrol-2:#17454F; --petrol-ink:#F4F8F6;
+  --accent:#E0B04A; --accent-ink:#2A2206; --teal:#3C9D9B; --coral:#DE7B5E; --line:#D5DFDB; --ok:#1F7A55;
+  --shadow:0 1px 2px rgba(14,47,54,.06),0 14px 34px -14px rgba(14,47,54,.22);
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0B1B1F; --surface:#13282D; --ink:#E9F1EE; --muted:#9DB1AF; --petrol:#08262C; --petrol-2:#123A43; --line:#27434A; --ok:#5FC79A; --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -14px rgba(0,0,0,.6);}}
+:root[data-theme="dark"]{
+  --bg:#0B1B1F; --surface:#13282D; --ink:#E9F1EE; --muted:#9DB1AF; --petrol:#08262C; --petrol-2:#123A43; --line:#27434A; --ok:#5FC79A; --shadow:0 1px 2px rgba(0,0,0,.3),0 14px 34px -14px rgba(0,0,0,.6);}
+*,*::before,*::after{box-sizing:inherit}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:"Newsreader",Georgia,"Times New Roman",serif;font-weight:500;line-height:1.08;margin:0 0 .5em;letter-spacing:-.015em}
+h1{font-size:clamp(2.5rem,7.5vw,4.6rem)}
+h2{font-size:clamp(1.8rem,4.2vw,2.7rem)}
+h3{font-size:1.35rem;line-height:1.2}
+p{margin:0 0 1em;max-width:64ch}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.wrap{max-width:1140px;margin:0 auto;padding:0 22px}
+.ribbon{background:var(--petrol);color:#B9CBC8;font-size:.78rem;padding:7px 20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.08)}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.navrow{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;padding-top:10px;padding-bottom:10px}
+.brand{display:flex;align-items:center;gap:9px;font-family:"Newsreader",Georgia,serif;font-weight:600;font-size:1.3rem;background:none;border:0;padding:4px 0;margin-right:auto}
+.brand svg{width:30px;height:30px}
+.links{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none}
+.links::-webkit-scrollbar{display:none}
+.links button{background:none;border:0;padding:8px 12px;border-radius:999px;font-size:.93rem;white-space:nowrap;color:var(--muted)}
+.links button:hover{color:var(--ink)}
+.links button[aria-current="page"]{background:var(--ink);color:var(--bg)}
+.tools{display:flex;gap:8px}
+.seg{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:var(--surface)}
+.seg button{background:none;border:0;padding:5px 11px;font-size:.82rem;font-weight:500}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+@media(max-width:860px){.links{order:3;flex-basis:100%;margin:0 -6px}}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--accent);color:var(--accent-ink);border:0;border-radius:999px;padding:13px 24px;font-weight:600;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 20px -8px rgba(14,47,54,.45)}
+.btn.ghost{background:none;color:inherit;box-shadow:inset 0 0 0 1.5px currentColor}
+.btn.dark{background:var(--ink);color:var(--bg)}
+.btn[disabled]{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none}
+section{padding:72px 0}
+.lead{font-size:1.15rem;color:var(--muted)}
+.hero{position:relative;overflow:hidden;background:var(--petrol);color:var(--petrol-ink);padding:84px 0 150px}
+.hero .arcs{position:absolute;right:-120px;bottom:-40px;width:min(760px,120vw);height:auto;pointer-events:none}
+.hero .wrap{position:relative}
+.hero h1{max-width:13ch}
+.hero p{font-size:1.2rem;color:#C3D3D0;max-width:54ch}
+.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.divs{padding:0 0 72px;margin-top:-96px;position:relative}
+.grid3{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.panel{display:flex;flex-direction:column;align-items:flex-start;text-align:left;background:var(--surface);border:0;border-radius:18px;padding:26px 26px 24px;box-shadow:var(--shadow);border-top:5px solid var(--c);transition:transform .15s}
+.panel:hover{transform:translateY(-4px)}
+.panel .tag{font-size:.78rem;font-weight:600;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:3px 10px}
+.panel b{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:2.6rem;line-height:1;margin:18px 0 10px;letter-spacing:-.02em}
+.panel small{font-size:1rem;color:var(--muted);flex:1;margin-bottom:18px}
+.panel em{font-style:normal;font-weight:600;border-bottom:2px solid var(--c);padding-bottom:2px}
+.flow{list-style:none;padding:0;margin:32px 0 0;display:grid;gap:0;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));counter-reset:f}
+.flow li{counter-increment:f;padding:22px 22px 6px 0;border-top:2px solid var(--ink);position:relative}
+.flow li::before{content:counter(f);font-family:"Newsreader",Georgia,serif;font-size:2.4rem;line-height:1;color:var(--teal);display:block;margin-bottom:10px}
+.flow p{color:var(--muted);font-size:.97rem}
+.split{display:grid;gap:32px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));align-items:start}
+.tint{background:color-mix(in srgb,var(--teal) 9%,var(--bg))}
+.band{background:var(--petrol);color:var(--petrol-ink)}
+.band p{color:#C3D3D0}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.card{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;display:flex;flex-direction:column;box-shadow:var(--shadow)}
+.card ul{list-style:none;padding:0;margin:0 0 22px;color:var(--muted);font-size:.96rem;flex:1}
+.card li{margin-bottom:8px;padding-left:24px;position:relative}
+.card li::before{content:"";position:absolute;left:2px;top:.5em;width:11px;height:6px;border-left:2px solid var(--teal);border-bottom:2px solid var(--teal);transform:rotate(-45deg)}
+.price{font-family:"Newsreader",Georgia,serif;font-size:2.5rem;font-weight:500;line-height:1;margin:6px 0 18px}
+.card.feat{background:var(--petrol);color:var(--petrol-ink);border-color:var(--petrol)}
+.card.feat ul{color:#C3D3D0}
+.card.feat li::before{border-color:var(--accent)}
+.card.feat .btn{background:var(--accent);color:var(--accent-ink)}
+.badge{position:absolute;top:-12px;left:22px;background:var(--accent);color:var(--accent-ink);font-size:.78rem;font-weight:600;border-radius:999px;padding:3px 12px}
+.pick{border:2px solid var(--accent)}
+.fork{display:grid;grid-template-columns:1fr 1fr;gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:6px;margin:26px 0 40px;box-shadow:var(--shadow);max-width:720px}
+.fork button{background:none;border:0;border-radius:15px;padding:18px 18px;text-align:left}
+.fork button[aria-pressed="true"]{background:var(--petrol);color:var(--petrol-ink)}
+.fork b{display:block;font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.45rem}
+.fork span{font-size:.9rem;opacity:.8}
+.bridge{display:grid;grid-template-columns:1fr auto 1fr;gap:18px;align-items:stretch;margin-top:30px}
+.bridge div{background:var(--petrol-2);border-radius:18px;padding:26px;color:#D4E0DD}
+.bridge h3{color:#fff}
+.bridge i{font-style:normal;font-size:2rem;color:var(--accent);align-self:center}
+@media(max-width:640px){.bridge{grid-template-columns:1fr}.bridge i{text-align:center;transform:rotate(90deg)}}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chips span{background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:9px 18px;font-size:.97rem}
+.quiz button.opt{display:flex;justify-content:space-between;align-items:center;width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px;font-weight:500;transition:border-color .12s,transform .12s}
+.quiz button.opt::after{content:"";width:9px;height:9px;border-right:2px solid var(--teal);border-top:2px solid var(--teal);transform:rotate(45deg);flex:none;margin-left:12px}
+.quiz button.opt:hover{border-color:var(--teal);transform:translateX(3px)}
+.story{padding-top:44px}
+.story::before{content:"\201C";position:absolute;top:8px;left:22px;font-family:"Newsreader",Georgia,serif;font-size:4.5rem;line-height:1;color:var(--accent)}
+.quote{font-family:"Newsreader",Georgia,serif;font-size:1.3rem;line-height:1.35}
+.close{background:var(--accent);color:var(--accent-ink);border-radius:24px;padding:44px 32px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+.close h2{margin:0 0 6px}.close p{margin:0}
+.steps{list-style:none;padding:0;margin:0 0 24px;counter-reset:s;background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow)}
+.steps li{counter-increment:s;display:grid;grid-template-columns:36px 1fr auto;gap:14px;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.steps li:last-child{border-bottom:0}
+.steps li::before{content:counter(s);width:34px;height:34px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-weight:600}
+.steps li.done::before{content:"✓";background:var(--ok);border-color:var(--ok);color:#fff}
+.steps .btn{padding:9px 16px;font-size:.92rem}
+footer{background:var(--petrol);color:#B9CBC8;padding:48px 0 100px;font-size:.93rem}
+footer .cols{display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+footer b{display:block;color:#fff;margin-bottom:8px}
+footer .brand{color:#fff;margin-bottom:10px}
+.wa{position:fixed;right:18px;bottom:calc(18px + env(safe-area-inset-bottom,0px));display:flex;align-items:center;gap:8px;background:#1FA855;color:#fff;border:0;border-radius:999px;padding:13px 20px;font-weight:600;z-index:30;box-shadow:0 10px 24px -8px rgba(8,60,35,.6)}
+.wa::before{content:"";width:9px;height:9px;border-radius:50%;background:#fff}
+.veil{position:fixed;inset:0;background:rgba(6,20,24,.62);backdrop-filter:blur(3px);z-index:40;display:grid;place-items:center;padding:16px;overflow:auto}
+.modal{background:var(--surface);border-radius:22px;padding:30px;width:100%;max-width:480px;max-height:92vh;overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.5)}
+.modal h2{font-size:1.8rem}
+.modal label{display:block;font-size:.9rem;font-weight:500;margin:14px 0 4px}
+.modal input[type=text],.modal input[type=email],.modal textarea{width:100%;font:inherit;padding:11px 14px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);margin-top:4px}
+.modal .row{display:flex;gap:10px;justify-content:space-between;margin-top:24px;flex-wrap:wrap}
+.auto{background:color-mix(in srgb,var(--ok) 10%,var(--surface));border-left:4px solid var(--ok);padding:11px 15px;border-radius:0 10px 10px 0;font-size:.93rem;margin:9px 0}
+.slots{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0}
+.slots button{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:11px 4px;font-size:.9rem}
+.slots button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.muted{color:var(--muted)}
+.pagehead{background:var(--petrol);color:var(--petrol-ink);padding:64px 0 56px}
+.pagehead p{color:#C3D3D0;font-size:1.15rem;margin:0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const S={lang:(navigator.language||'es').startsWith('en')?'en':'es',cur:/en-GB/i.test(navigator.language||'')?'GBP':'EUR',view:'home',area:'pro',modal:null,step:0,slot:null,quiz:null,paid:null,portal:{test:false,form:false,docs:false,booked:false}};
+const T=(es,en)=>S.lang==='es'?es:en;
+const money=p=>S.cur==='EUR'?p[0].toLocaleString('es-ES')+' €':'£'+p[1].toLocaleString('en-GB');
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const PRO=()=>[
+ {id:'p1',n:T('Punto de partida','Starting point'),p:[190,165],f:T(['Revisión y reescritura de CV','Perfil de LinkedIn optimizado','1 sesión individual'],['CV review and rewrite','Optimised LinkedIn profile','1 one-to-one session'])},
+ {id:'p2',n:T('Impulso','Momentum'),p:[490,425],f:T(['Todo lo anterior','Test psicométrico y lectura de resultados','Estrategia de búsqueda','3 sesiones individuales'],['Everything above','Psychometric test and debrief','Job search strategy','3 one-to-one sessions'])},
+ {id:'p3',n:T('Reposicionamiento','Repositioning'),p:[890,775],f:T(['Todo lo anterior','Marca profesional y visibilidad','Preparación de entrevistas','6 sesiones individuales'],['Everything above','Professional brand and visibility','Interview preparation','6 one-to-one sessions'])},
+ {id:'p4',n:T('Acompañamiento sénior','Senior partnership'),p:[1490,1290],f:T(['Todo lo anterior','Mercado internacional (España y Reino Unido)','Negociación de oferta','10 sesiones y seguimiento de 3 meses'],['Everything above','International market (Spain and UK)','Offer negotiation','10 sessions and 3-month follow-up'])}];
+const OUT=()=>[
+ {n:T('Esencial','Essential'),f:T(['Creación de CV y perfil','Taller grupal de búsqueda'],['CV and profile creation','Group job search workshop'])},
+ {n:T('Transición','Transition'),f:T(['Esencial más sesiones individuales','Plan de búsqueda personalizado'],['Essential plus one-to-one sessions','Personal search plan'])},
+ {n:T('Recolocación activa','Active placement'),f:T(['Transición más acceso a mercado oculto','Preparación de entrevistas','Informe de avance para la empresa'],['Transition plus hidden market access','Interview preparation','Progress report for the company'])},
+ {n:T('Sénior y directivos','Senior and executive'),f:T(['Acompañamiento individual de 6 meses','Coaching ejecutivo','Proyección internacional'],['Six-month individual support','Executive coaching','International reach'])}];
+
+const MARK='<svg viewBox="0 0 32 32" fill="none" aria-hidden="true"><path d="M3 24a13 13 0 0 1 26 0" stroke="currentColor" stroke-width="2.5"/><path d="M9.5 24a6.5 6.5 0 0 1 13 0" stroke="#E0B04A" stroke-width="2.5"/><path d="M1 24h30" stroke="currentColor" stroke-width="2.5"/></svg>';
+function nav(){
+ const L=[['home',T('Grupo','Group')],['careers','Careers'],['consulting','Consulting'],['expats','Expats'],['resources',T('Recursos','Resources')],['portal',T('Portal cliente','Client portal')]];
+ return `<div class="ribbon">${T('Demo de propuesta. Marca, textos y precios son ilustrativos; formularios, pagos y reservas están simulados.','Proposal demo. Brand, copy and prices are illustrative; forms, payments and bookings are simulated.')}</div>
+ <header class="nav"><div class="wrap navrow">
+ <button class="brand" data-go="home">${MARK}Vínculo Talent</button>
+ <nav class="links">${L.map(([v,l])=>`<button data-go="${v}" ${S.view===v?'aria-current="page"':''}>${l}</button>`).join('')}</nav>
+ <div class="tools"><div class="seg" role="group" aria-label="${T('Idioma','Language')}"><button data-lang="es" aria-pressed="${S.lang==='es'}">ES</button><button data-lang="en" aria-pressed="${S.lang==='en'}">EN</button></div>
+ <div class="seg" role="group" aria-label="${T('Divisa','Currency')}"><button data-cur="EUR" aria-pressed="${S.cur==='EUR'}">€</button><button data-cur="GBP" aria-pressed="${S.cur==='GBP'}">£</button></div></div>
+ </div></header>`;
+}
+
+function home(){
+ const lanes=[['careers','Careers','B2C + B2B','var(--accent)',T('Desarrollo profesional para personas y outplacement para empresas.','Career development for individuals and outplacement for companies.')],
+  ['consulting','Consulting','B2B','var(--teal)',T('Estrategia de talento, selección, retención y transformación organizacional.','Talent strategy, hiring, retention and organisational change.')],
+  ['expats','Expats','B2B + B2C','var(--coral)',T('Movilidad internacional e integración laboral entre España, Reino Unido y Europa.','International mobility and work integration across Spain, the UK and Europe.')]];
+ const stories=[[T('Llevaba cuatro años en el mismo puesto. En tres meses tenía dos ofertas y elegí yo.','I had been in the same role for four years. Three months later I had two offers and I got to choose.'),T('Ingeniera de datos, Madrid','Data engineer, Madrid')],
+  [T('El programa de transición cambió el tono de una reestructuración muy difícil.','The transition programme changed the tone of a very hard restructuring.'),T('Directora de personas, sector logístico','People director, logistics')],
+  [T('Me mudé a Londres con el contrato, el piso y los papeles resueltos.','I moved to London with the contract, the flat and the paperwork sorted.'),T('Responsable de operaciones','Operations lead')]];
+ const flow=T([['Consulta gratuita','Hablamos 20 o 30 minutos y vemos en qué punto estás.'],['Eliges tu paquete','Lo contratas en la web, en euros o en libras.'],['Preparas el terreno','Test, información profesional y documentos, desde tu portal.'],['Empiezan las sesiones','Reservas la primera y trabajamos con un plan claro.']],
+  [['Free consultation','We talk for 20 to 30 minutes and see where you stand.'],['Choose your package','Buy it on the site, in euros or pounds.'],['Get set up','Test, professional details and documents, from your portal.'],['Sessions begin','Book the first one and we work to a clear plan.']]);
+ return `<section class="hero"><svg class="arcs" viewBox="0 0 760 420" fill="none" aria-hidden="true">${[360,300,240,180,120].map((r,i)=>`<path d="M${380-r} 420a${r} ${r} 0 0 1 ${2*r} 0" stroke="${i%2?'#3C9D9B':'#E0B04A'}" stroke-opacity="${.16+i*.13}" stroke-width="${i===4?3:1.5}"/>`).join('')}</svg><div class="wrap">
+ <h1>${T('Talento y oportunidad, del mismo lado.','Talent and opportunity, on the same side.')}</h1>
+ <p>${T('Preparamos a los profesionales para el mercado que viene y a las empresas para recibirlos, retenerlos y hacerlos crecer. Desde Madrid, con alcance en España, Reino Unido y Europa.','We prepare professionals for the market ahead and companies to welcome, keep and grow them. From Madrid, working across Spain, the UK and Europe.')}</p>
+ <div class="cta"><button class="btn" data-area="pro" data-go="careers">${T('Soy profesional','I am a professional')}</button><button class="btn ghost" data-area="biz" data-go="careers">${T('Soy empresa','I am a company')}</button></div>
+ </div></section>
+ <section class="divs"><div class="wrap grid3">${lanes.map(([v,n,t,c,d])=>`<button class="panel" style="--c:${c}" data-go="${v}"><span class="tag">${t}</span><b>${n}</b><small>${d}</small><em>${T('Entrar en','Go to')} ${n}</em></button>`).join('')}</div></section>
+
+ <section style="padding-top:0"><div class="wrap"><h2>${T('Cómo trabajamos contigo','How we work with you')}</h2>
+ <ol class="flow">${flow.map(([a,b])=>`<li><h3>${a}</h3><p>${b}</p></li>`).join('')}</ol></div></section>
+
+ <section class="tint"><div class="wrap split quiz"><div><h2>${T('¿Qué te frena ahora mismo?','What is holding you back right now?')}</h2>
+ <p class="lead">${T('Elige una opción y te decimos por dónde empezar. Dura diez segundos.','Pick one and we will tell you where to start. It takes ten seconds.')}</p></div>
+ <div>${quiz()}</div></div></section>
+
+ <section class="band"><div class="wrap"><h2>${T('Un puente en los dos sentidos','A bridge that runs both ways')}</h2>
+ <p>${T('No somos una consultora de RR. HH. ni una agencia de recolocación aislada. Trabajamos a la vez con quien busca y con quien contrata.','We are neither a stand-alone HR consultancy nor a placement agency. We work with those who are looking and those who are hiring, at the same time.')}</p>
+ <div class="bridge"><div><h3>${T('Profesionales','Professionals')}</h3>${T('Posicionamiento, visibilidad y estrategia para acceder a empleo de calidad, aquí o fuera.','Positioning, visibility and strategy to reach quality jobs, at home or abroad.')}</div><i>⇄</i><div><h3>${T('Empresas','Companies')}</h3>${T('Captación, onboarding y retención basados en datos, y transiciones de plantilla bien llevadas.','Data-led hiring, onboarding and retention, and workforce transitions handled well.')}</div></div>
+ </div></section>
+
+ <section><div class="wrap"><h2>${T('Sectores en los que trabajamos','Sectors we work in')}</h2>
+ <div class="chips">${T(['Tecnología','Ingeniería','Logística','Negocio y operaciones','Posiciones de liderazgo'],['Technology','Engineering','Logistics','Business and operations','Leadership roles']).map(x=>`<span>${x}</span>`).join('')}</div>
+ <h2 style="margin-top:64px">${T('Historias de éxito','Success stories')}</h2>
+ <div class="grid">${stories.map(([q,a])=>`<div class="card story"><p class="quote">${q}</p><span class="muted">${a}</span></div>`).join('')}</div>
+ </div></section>
+
+ <section style="padding-top:0"><div class="wrap"><div class="close"><div><h2>${T('Hablemos','Let’s talk')}</h2>
+ <p>${T('Cuéntanos tu caso y te respondemos en un día laborable.','Tell us about your case and we will reply within one working day.')}</p></div>
+ <button class="btn dark" data-lead="contact">${T('Solicitar información','Request information')}</button></div></div></section>`;
+}
+
+function quiz(){
+ const Q=[[T('No avanzo en mi puesto actual','I am stuck in my current role'),1,T('Empieza por medir: un test de perfil y una estrategia de búsqueda aclaran hacia dónde moverte.','Start by measuring: a profile test and a search strategy show where to move.')],
+  [T('Envío el CV y no me llaman','I send my CV and hear nothing'),0,T('Suele ser un problema de documento, no de experiencia. Reescribe el CV por logros y alinea LinkedIn.','It is usually the document, not your experience. Rewrite the CV around achievements and align LinkedIn.')],
+  [T('Quiero cambiar de sector o subir de nivel','I want to change sector or step up'),2,T('Necesitas un relato nuevo y visibilidad. Trabaja tu marca profesional antes de aplicar.','You need a new story and visibility. Work on your professional brand before applying.')],
+  [T('Quiero trabajar en otro país','I want to work in another country'),3,T('El mercado británico y el español piden cosas distintas. Adapta candidatura y prepara la negociación.','The UK and Spanish markets ask for different things. Adapt your application and prepare the negotiation.')]];
+ if(S.quiz===null) return Q.map((q,i)=>`<button class="opt" data-quiz="${i}">${q[0]}</button>`).join('');
+ const q=Q[S.quiz],pk=PRO()[q[1]];
+ return `<div class="card pick"><p>${q[2]}</p><p><strong>${T('Paquete recomendado:','Recommended package:')} ${pk.n}</strong>, ${money(pk.p)}</p>
+ <div><button class="btn" data-area="pro" data-go="careers">${T('Ver el paquete','See the package')}</button> <button class="btn ghost" data-quiz="reset">${T('Volver a empezar','Start again')}</button></div></div>`;
+}
+
+function careers(){
+ const pro=S.area==='pro';
+ return `<div class="pagehead"><div class="wrap"><h1>Careers</h1><p>${T('Elige cómo quieres entrar.','Choose how you want to come in.')}</p></div></div><section style="padding-top:8px"><div class="wrap">
+ <div class="fork" role="group"><button data-area="biz" aria-pressed="${!pro}"><b>${T('Soy empresa','I am a company')}</b><span>${T('Outplacement para tu plantilla','Outplacement for your staff')}</span></button>
+ <button data-area="pro" aria-pressed="${pro}"><b>${T('Soy profesional','I am a professional')}</b><span>${T('Desarrollo y acompañamiento de carrera','Career development and support')}</span></button></div>
+ ${pro?`<h2>${T('Cuatro formas de avanzar','Four ways to move forward')}</h2>
+ <p>${T('La primera consulta es gratuita y dura entre 20 y 30 minutos. Después puedes contratar tu paquete aquí mismo.','Your first consultation is free and lasts 20 to 30 minutes. Afterwards you can buy your package right here.')}</p>
+ <p><button class="btn" data-lead="pro">${T('Solicitar primera consulta gratuita','Request a free first consultation')}</button></p>
+ <div class="grid">${PRO().map((p,i)=>`<div class="card${i===2?' feat':''}">${i===2?`<span class="badge">${T('El más elegido','Most chosen')}</span>`:''}<h3>${p.n}</h3><div class="price">${money(p.p)}</div><ul>${p.f.map(f=>`<li>${f}</li>`).join('')}</ul><button class="btn dark" data-buy="${i}">${T('Contratar','Buy')} ${p.n}</button></div>`).join('')}</div>
+ <p class="muted" style="margin-top:14px">${T('Precios fijos por mercado: euros en España y Europa, libras en Reino Unido. Sin conversión automática.','Fixed prices per market: euros in Spain and Europe, pounds in the UK. No automatic conversion.')}</p>`
+ :`<h2>${T('Programas de outplacement','Outplacement programmes')}</h2>
+ <p>${T('Para organizaciones que reducen plantilla y quieren ofrecer una transición de carrera seria a quienes salen.','For organisations reducing headcount that want to offer leavers a proper career transition.')}</p>
+ <div class="grid">${OUT().map(p=>`<div class="card"><h3>${p.n}</h3><ul>${p.f.map(f=>`<li>${f}</li>`).join('')}</ul></div>`).join('')}</div>
+ <p style="margin-top:24px"><button class="btn" data-lead="quote">${T('Solicitar presupuesto personalizado','Request a tailored quote')}</button> <button class="btn ghost" data-lead="biz">${T('Solicitar información','Request information')}</button></p>`}
+ </div></section>`;
+}
+
+function division(name,intro,items,pro){
+ return `<div class="pagehead"><div class="wrap"><h1>${name}</h1><p>${intro}</p></div></div><section style="padding-top:40px"><div class="wrap">
+ <div class="grid" style="margin:24px 0">${items.map(([h,d])=>`<div class="card"><h3>${h}</h3><p class="muted" style="margin:0">${d}</p></div>`).join('')}</div>
+ <button class="btn" data-lead="${pro?'biz':'biz'}">${T('Solicitar información','Request information')}</button>
+ ${pro?` <button class="btn ghost" data-lead="pro">${T('Soy profesional: reservar consulta gratuita','I am a professional: book a free consultation')}</button>`:''}
+ </div></section>`;
+}
+const consulting=()=>division('Consulting',T('Consultoría de RR. HH. y gestión de talento para empresas. Lanzamiento completo en la siguiente fase; ya puedes contarnos qué necesitas.','HR and talent consulting for companies. Full launch in the next phase; you can already tell us what you need.'),
+ T([['Selección y reclutamiento','Procesos más cortos y mejor ajustados al puesto.'],['Onboarding y retención','Que quien entra se quede y rinda.'],['Desarrollo organizacional','Estructuras de equipo y cultura que acompañan el crecimiento.'],['Decisiones con datos','Indicadores de personas para decidir con evidencia.']],
+ [['Hiring and recruitment','Shorter processes with a better fit.'],['Onboarding and retention','So that new hires stay and perform.'],['Organisational development','Team structures and culture that support growth.'],['Data-led decisions','People metrics to decide on evidence.']]));
+const expats=()=>division('Expats',T('Acompañamos la recolocación internacional de profesionales y equipos.','We support the international relocation of professionals and teams.'),
+ T([['Para empresas','Traslados de personal, integración en destino y seguimiento.'],['Para profesionales','Búsqueda en destino, adaptación de candidatura y llegada.'],['España ⇄ Reino Unido','Nuestro corredor principal, con escalado a Europa.']],
+ [['For companies','Staff transfers, integration at destination and follow-up.'],['For professionals','Job search abroad, adapted applications and arrival.'],['Spain ⇄ UK','Our main corridor, extending to Europe.']]),true);
+
+function resources(){
+ const R=T([['Blog','Cinco señales de que tu CV no pasa el primer filtro'],['Artículo','Tendencias del mercado laboral en España y Reino Unido'],['Guía para profesionales','Plantilla de CV por logros (descargable)'],['Guía para empresas','Cómo plantear un programa de outplacement']],
+ [['Blog','Five signs your CV is failing the first screen'],['Article','Job market trends in Spain and the UK'],['Guide for professionals','Achievement-based CV template (download)'],['Guide for companies','How to set up an outplacement programme']]);
+ return `<div class="pagehead"><div class="wrap"><h1>${T('Recursos','Resources')}</h1></div></div><section style="padding-top:40px"><div class="wrap"><p class="lead">${T('Guías, plantillas y análisis del mercado laboral. El equipo publica desde un panel de edición, sin tocar código.','Guides, templates and job market analysis. The team publishes from an editing panel, with no code involved.')}</p>
+ <div class="grid">${R.map(([k,t])=>`<div class="card"><span class="muted">${k}</span><h3>${t}</h3><button class="btn ghost" data-lead="download">${T('Descargar o leer','Download or read')}</button></div>`).join('')}</div></div></section>`;
+}
+
+function portal(){
+ const P=S.portal,all=P.test&&P.form&&P.docs;
+ const it=[['test',T('Haz el test psicométrico','Take the psychometric test'),T('Abrir test','Open test')],['form',T('Completa tu información profesional','Complete your professional details'),T('Abrir formulario','Open form')],['docs',T('Sube tu CV, carta y portfolio','Upload your CV, letter and portfolio'),T('Subir documentos','Upload documents')]];
+ return `<div class="pagehead"><div class="wrap"><h1>${T('Portal cliente','Client portal')}</h1></div></div><section style="padding-top:40px"><div class="wrap">
+ <p>${S.paid?T('Paquete contratado: ','Package purchased: ')+'<strong>'+S.paid+'</strong>. ':''}${T('Completa estos tres pasos antes de tu primera sesión. Tus respuestas y archivos se guardan en tu ficha.','Complete these three steps before your first session. Your answers and files are saved to your record.')}</p>
+ <ol class="steps">${it.map(([k,l,b])=>`<li class="${P[k]?'done':''}"><span>${l}</span>${P[k]?`<span class="muted">${T('Hecho','Done')}</span>`:`<button class="btn dark" data-task="${k}">${b}</button>`}</li>`).join('')}</ol>
+ ${P.booked?`<div class="auto">${T('Sesión reservada. Te hemos enviado la confirmación por email.','Session booked. We have emailed you the confirmation.')}</div>`
+ :`<button class="btn" data-book ${all?'':'disabled'}>${T('Reservar primera sesión','Book first session')}</button> ${all?`<span class="muted">${T('Te hemos enviado también el enlace por email.','We have also emailed you the link.')}</span>`:`<span class="muted">${T('Se activa al completar los tres pasos.','Unlocks when the three steps are complete.')}</span>`}`}
+ </div></section>`;
+}
+
+function slots(){const d=T(['Lun','Mar','Mié'],['Mon','Tue','Wed']);return `<div class="slots">${d.flatMap(x=>['10:00','16:30']).map((h,i)=>{const l=d[Math.floor(i/2)]+' '+h;return `<button data-slot="${l}" aria-pressed="${S.slot===l}">${l}</button>`}).join('')}</div>`}
+
+function modal(){
+ const m=S.modal;if(!m)return'';
+ let b='';const close=`<button class="btn ghost" data-close>${T('Cerrar','Close')}</button>`;
+ if(m.t==='lead'){
+  const biz=['biz','quote'].includes(m.k);
+  const title={pro:T('Primera consulta gratuita','Free first consultation'),quote:T('Presupuesto personalizado','Tailored quote'),biz:T('Solicitar información','Request information'),contact:T('Solicitar información','Request information'),download:T('Recibe el recurso por email','Get the resource by email')}[m.k];
+  if(S.step===0) b=`<h2>${title}</h2><label>${T('Nombre','Name')}<input type="text" id="f-n"></label><label>Email<input type="email" id="f-e"></label>${biz?`<label>${T('Empresa','Company')}<input type="text"></label>`:''}${m.k!=='download'?`<label>${T('¿En qué podemos ayudarte?','How can we help?')}<textarea rows="3"></textarea></label>`:''}
+   <label style="font-weight:400"><input type="checkbox" id="f-c"> ${T('Acepto la política de privacidad (RGPD y UK GDPR).','I accept the privacy policy (GDPR and UK GDPR).')}</label><p id="f-err" class="muted" role="alert" style="margin:8px 0 0"></p>
+   <div class="row">${close}<button class="btn" data-send>${T('Enviar solicitud','Send request')}</button></div>`;
+  else if(S.step===1) b=`<h2>${T('Solicitud enviada','Request sent')}</h2>
+   <div class="auto">${T('Automático: se crea la ficha del contacto en el CRM con el origen de la solicitud.','Automatic: the contact record is created in the CRM with the request source.')}</div>
+   <div class="auto">${T('Automático: el equipo recibe una alerta por email.','Automatic: the team receives an email alert.')}</div>
+   ${m.k==='pro'?`<p style="margin-top:14px">${T('Elige hora para tu consulta gratuita de 20 a 30 minutos.','Choose a time for your free 20 to 30 minute consultation.')}</p>${slots()}<div class="row">${close}<button class="btn" data-confirm ${S.slot?'':'disabled'}>${T('Reservar consulta','Book consultation')}</button></div>`:`<div class="row"><span></span>${close}</div>`}`;
+  else b=`<h2>${T('Consulta reservada','Consultation booked')}</h2><p>${S.slot}. ${T('Recibirás el enlace de la videollamada por email. Después de la consulta podrás contratar tu paquete desde Careers.','You will get the video call link by email. After the consultation you can buy your package from Careers.')}</p><div class="row"><span></span>${close}</div>`;
+ }
+ if(m.t==='buy'){
+  const p=PRO()[m.i];
+  if(S.step===0) b=`<h2>${T('Pago seguro','Secure payment')}</h2><p><strong>${p.n}</strong><br><span class="price">${money(p.p)}</span></p>
+   <label>Email<input type="email"></label><label>${T('Tarjeta','Card')}<input type="text" placeholder="4242 4242 4242 4242"></label>
+   <p class="muted" style="font-size:.88rem;margin-top:10px">${T('En la web real este paso es la pasarela de pago alojada, que cobra en la divisa de tu mercado.','On the live site this step is the hosted payment page, charging in your market’s currency.')}</p>
+   <div class="row">${close}<button class="btn" data-pay>${T('Pagar','Pay')} ${money(p.p)}</button></div>`;
+  else b=`<h2>${T('Pago confirmado','Payment confirmed')}</h2>
+   <div class="auto">${T('Automático: email de confirmación con tus datos de acceso al portal cliente.','Automatic: confirmation email with your client portal login.')}</div>
+   <div class="auto">${T('Automático: la venta queda registrada en tu ficha del CRM.','Automatic: the sale is logged on your CRM record.')}</div>
+   <div class="row"><span></span><button class="btn" data-go="portal" data-close>${T('Entrar al portal cliente','Go to client portal')}</button></div>`;
+ }
+ if(m.t==='book') b=`<h2>${T('Reservar primera sesión','Book first session')}</h2><p class="muted">${T('Disponibilidad a partir de una semana desde hoy.','Availability from one week from today.')}</p>${slots()}<div class="row">${close}<button class="btn" data-bookok ${S.slot?'':'disabled'}>${T('Reservar sesión','Book session')}</button></div>`;
+ if(m.t==='wa') b=`<h2>WhatsApp Business</h2><p>${T('En la web real este botón abre un chat de WhatsApp con el número de empresa y un mensaje ya escrito según la página desde la que escribes.','On the live site this button opens a WhatsApp chat with the business number and a pre-written message based on the page you are on.')}</p><div class="row"><span></span>${close}</div>`;
+ return `<div class="veil" data-veil><div class="modal" role="dialog" aria-modal="true">${b}</div></div>`;
+}
+
+function render(keep){
+ const y=window.scrollY;
+ document.documentElement.lang=S.lang;
+ const V={home,careers,consulting,expats,resources,portal};
+ document.getElementById('app').innerHTML=nav()+'<main>'+V[S.view]()+'</main>'+
+ `<footer><div class="wrap cols"><div><div class="brand">${MARK}Vínculo Talent</div>${T('Soluciones de talento para crecer, cambiar y moverse por el mundo.','Talent solutions for growth, transition and global mobility.')}</div>
+ <div><b>${T('Divisiones','Divisions')}</b>Careers<br>Consulting<br>Expats</div>
+ <div><b>${T('Mercados','Markets')}</b>${T('España','Spain')}<br>${T('Reino Unido','United Kingdom')}<br>${T('Europa','Europe')}</div>
+ <div><b>Legal</b>${T('Aviso legal','Legal notice')}<br>${T('Privacidad','Privacy')}<br>Cookies</div></div></footer>
+ <button class="wa" data-wa>WhatsApp</button>`+modal();
+ window.scrollTo(0,keep?y:0);
+}
+document.addEventListener('click',e=>{
+ const el=e.target.closest('button,[data-veil]');if(!el)return;const d=el.dataset;let keep=true;
+ if('veil' in d&&e.target!==el)return;
+ if('veil' in d||'close' in d){S.modal=null;S.step=0;S.slot=null}
+ if(d.lang)S.lang=d.lang;
+ if(d.cur)S.cur=d.cur;
+ if(d.area)S.area=d.area;
+ if(d.go){S.view=d.go;keep=false}
+ if(d.quiz!==undefined)S.quiz=d.quiz==='reset'?null:+d.quiz;
+ if(d.lead){S.modal={t:'lead',k:d.lead};S.step=0;S.slot=null}
+ if(d.buy!==undefined){S.modal={t:'buy',i:+d.buy};S.step=0}
+ if('send' in d){const n=document.getElementById('f-n').value.trim(),m=document.getElementById('f-e').value.trim(),c=document.getElementById('f-c').checked;
+  if(!n||!/.+@.+\..+/.test(m)||!c){document.getElementById('f-err').textContent=T('Escribe tu nombre, un email válido y acepta la política de privacidad.','Enter your name, a valid email and accept the privacy policy.');return}
+  S.step=1}
+ if(d.slot)S.slot=d.slot;
+ if('confirm' in d)S.step=2;
+ if('pay' in d){S.step=1;S.paid=PRO()[S.modal.i].n}
+ if(d.task)S.portal[d.task]=true;
+ if('book' in d){S.modal={t:'book'};S.slot=null}
+ if('bookok' in d){S.portal.booked=true;S.modal=null;S.slot=null}
+ if('wa' in d)S.modal={t:'wa'};
+ render(keep);
+});
+render();
+</script>
+</body>
+</html>
